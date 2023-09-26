@@ -10,6 +10,7 @@
 #define on 9//Pin encendido
 #define off 10
 
+//Agregar busqueda aleatoria y Evadir RAND
 //Mejorar ataque e implementar giro.
 //Revisar velocidad máxima antes de salirse del ring por inercia, sin detectar el blanco y retroceder
 //Agregar giro y choque tras determinada distancia
@@ -51,10 +52,10 @@ int read_on;
 typedef enum{
   BUSCANDO = 0,
   BUSCANDORAND,
-  BUSCANDOSLOW,
   BUSCANDOTAC,
   ATAQUE,
-  EVADIR
+  EVADIR,
+  EVADIRRAND
 }ST_ROBOT;
 
 ST_ROBOT st_robot = BUSCANDO;
@@ -137,12 +138,9 @@ void robot_buscando(){  //Tornado
        }
     }
 }
-
-void robot_buscTac(){  //Tornado
-    /* poner sensado aca, de todos los sensores*/
-
-    if(adci <= limiteb || adcd <= limiteb){
-      st_robot = EVADIR;
+void robot_busquedaAleatoria(){ //AGREGAR SENSORES DE LOS LADOS
+  if(adci <= limiteb || adcd <= limiteb){
+      st_robot = EVADIRRAND;
     
     }else if(adci >= limiten && adcd >= limiten){
       led1on;
@@ -153,6 +151,25 @@ void robot_buscTac(){  //Tornado
           delay(200);
           motors(0,0);
           delay(800);
+       }else{
+          st_robot = ATAQUE;
+       }
+    }
+
+}
+void robot_buscTac(){  //Tornado
+
+    if(adci <= limiteb || adcd <= limiteb){
+      st_robot = EVADIR;
+    
+    }else if(adci >= limiten && adcd >= limiten){
+      led1on;
+      led2on;
+      led3off;
+      if(sharpi<400 && sharpd>400 && sidei>400 && sided>400){
+          motors(200,200);
+          delay(10);
+          motors(0,0);
        }else{
           st_robot = ATAQUE;
        }
@@ -232,7 +249,37 @@ void robot_evadir(){
   }
 }
 
-
+void robot_evadirRand(){
+  led1off;
+  led2off;
+  led3off;
+  long tiempoGiro = random(100,300);
+  if(adcd <= limiteb && adci >= limiten){
+    //Evada reversa hacia la izquierda:
+    led2on;
+    motors(50, -100);
+    delay(tiempoGiro);
+    motors(0,0);
+  }else if(adcd >= limiten && adci <= limiteb){
+    //Evada reversa hacia la derecha:
+    led1on;
+    motors(-100, 50);
+    delay(tiempoGiro);
+    motors(0,0);
+  }else if(adcd <= limiteb && adci <= limiteb){
+    //reversa
+    led3on;
+    motors(-100, -100);
+    delay(tiempoGiro);
+    motors(0,0);
+  }else{
+    led1off;
+    led2off;
+    led3off;
+    st_robot = BUSCANDO;
+    
+  }
+}
 
 void robot_process(){
     switch (st_robot)
