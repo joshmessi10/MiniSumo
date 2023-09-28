@@ -39,6 +39,12 @@ const int in2b = 2; //direccion motor 2(izquierdo) reversa
 const int pwm1 = 5; //PWM motor 1 Derecho
 const int pwm2 = 6; //PWM motor 2 Izquierdo
 
+const int sw1 = 8; //PWM motor 1 Derecho
+const int sw2 = 7; //PWM motor 2 Izquierdo
+
+bool randomMode = false;
+bool activate = false;
+
 const int limiteb = 80;
 const int limiten = 120;
 
@@ -107,6 +113,9 @@ void variables(){
   
   pinMode(pwm1,OUTPUT);
   pinMode(pwm2,OUTPUT);
+
+  pinMode(sw1,INPUT);
+  pinMode(sw2,INPUT);
 }
 
 void lecturaSensores(){
@@ -353,7 +362,24 @@ void robot_process(){
     case EVADIR:
         robot_evadir();
       break;
-    case EVADIRRAND:
+
+    default: 
+        st_robot = BUSCANDO;
+      break;
+    }
+}
+
+void robot_processAlt(){
+    switch (st_robot)
+    {
+    case BUSCANDO:
+        robot_buscandoRandom();
+      break;
+    case ATAQUE:
+        robot_ataque();
+      break;
+          
+    case EVADIR:
         robot_evadirRand();
       break;
       
@@ -366,14 +392,26 @@ void robot_process(){
 
 
 
-
-
 void setup() {
  variables();
 }
 
 void loop() {
+  if(digitalRead(sw2)==HIGH){
+    randomMode = true;
+  }
+  if(digitalRead(sw1)==HIGH){
+    activate = true;
+  }
+  
+  if(activate==true && randomMode == false){
     lecturaSensores();
     robot_process();
+  }
+  if(activate==true && randomMode == true){
+    lecturaSensores();
+    robot_processAlt();
+  }
+    
  
 }
