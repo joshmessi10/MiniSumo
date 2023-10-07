@@ -45,9 +45,10 @@ const int sw2 = 7; //PWM motor 2 Izquierdo
 bool randomMode = false;
 bool activate = false;
 
-const int limiteb = 80;
-const int limiten = 120;
-
+const int limiteb1 = 80;
+const int limiten1 = 80;
+const int limiteb2 = 80;
+const int limiten2 = 80;
 //Colocamos para leer sensor:
 int read_on;
 
@@ -120,50 +121,45 @@ void variables(){
 void lecturaSensores(){
   //lectura de los sensores de piso y los sharp:
  adcd = analogRead(6); // Lee sensor Derecho
- delay(5);
  adci = analogRead(7); // Lee sensor Izquierdo
- delay(5);
  sharpi = analogRead(4);
- delay(5);
  sharpd = analogRead(2);
- delay(5);
  sidei = analogRead(3);
- delay(5);
  sided = analogRead(0);
- delay(5);
 }
 
 
 void robot_buscandoCircular(){ 
-
-    if(adci <= limiteb || adcd <= limiteb){
+    lecturaSensores();
+    if(adci <= limiteb1 || adcd <= limiteb2){
       st_robot = EVADIR;
     
-    }else if(adci >= limiten && adcd >= limiten){
+    }else if(adci >= limiten1 && adcd >= limiten2){
       led1off;
       led2off;
       led3on;
-      if(sharpi<maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten && adcd >= limiten){
-          motors(75,75);
-          if(sidei<maxDistanceMini && adci >= limiten && adcd >= limiten){
+      if(sharpi<maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
+          motors(65,65);
+          lecturaSensores();
+          if(sidei<maxDistanceMini && adci >= limiten1 && adcd >= limiten2){
             led1on;
             led2on;
             led3off;
-              while(sharpi<maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten && adcd >= limiten){
+              while(sharpd<maxDistanceBig && adci >= limiten1 && adcd >= limiten1){
                 lecturaSensores();
-                motors(-255,-100);
+                motors(-255,100);
               }
           }
-          if(sided<maxDistanceMini && adci >= limiten && adcd >= limiten){
+          if(sided<maxDistanceMini && adci >= limiten1 && adcd >= limiten2){
             led1on;
             led2off;
             led3on;
-              while(sharpi<maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten && adcd >= limiten){
+              while(sharpi<maxDistanceBig && adci >= limiten1 && adcd >= limiten1){
                 lecturaSensores();
-                motors(-100,-255);
+                motors(100,-255);
               }
           }
-      }else if(adci <= limiteb || adcd <= limiteb){
+      }else if(adci <= limiteb1 || adcd <= limiteb2){
           st_robot = EVADIR;
       }else{
         st_robot = ATAQUE;
@@ -172,17 +168,18 @@ void robot_buscandoCircular(){
 }
 
 void robot_buscandoEvasion(){ 
-
-    if(adci <= limiteb || adcd <= limiteb){
+    lecturaSensores();
+    if(adci <= limiteb1 || adcd <= limiteb2){
       st_robot = EVADIR;
     
-    }else if(adci >= limiten && adcd >= limiten){
+    }else if(adci >= limiten1 && adcd >= limiten2){
       led1off;
       led2off;
       led3on;
-      if(sharpi<maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten && adcd >= limiten){
-          motors(75,75);
-          if(sidei<maxDistanceMini && adci >= limiten && adcd >= limiten){
+      if(sharpi<maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
+          motors(65,65);
+          lecturaSensores();
+          if(sidei<maxDistanceMini && adci >= limiten1 && adcd >= limiten2){
             led1on;
             led2on;
             led3off;
@@ -190,7 +187,7 @@ void robot_buscandoEvasion(){
             delay(200); //250
             motors(0,0);
           }
-          if(sided<maxDistanceMini && adci >= limiten && adcd >= limiten){
+          if(sided<maxDistanceMini && adci >= limiten1 && adcd >= limiten2){
             led1on;
             led2off;
             led3on;
@@ -198,7 +195,7 @@ void robot_buscandoEvasion(){
             delay(200); //250
             motors(0,0);
           }
-      }else if(adci <= limiteb || adcd <= limiteb){
+      }else if(adci <= limiteb1 || adcd <= limiteb2){
           st_robot = EVADIR;
       }else{
         st_robot = ATAQUE;
@@ -209,32 +206,35 @@ void robot_buscandoEvasion(){
 
 void robot_ataqueEvasion(){
         
-  
-  if(adci <= limiteb || adcd <= limiteb){
+  lecturaSensores();
+  if(adci <= limiteb1 || adcd <= limiteb2){
     st_robot = EVADIR;
-  }else if(adci >= limiten && adcd >= limiten){
-    if(sharpi>maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten && adcd >= limiten){
+  }else if(adci >= limiten1 && adcd >= limiten2){
+    if(sharpi>maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1on;
         led2on;
         led3on;
         motors(-100, -255);
         delay(200); //250
         motors(0,0);
-    }else if(sharpi<maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten && adcd >= limiten){
+        lecturaSensores();
+    }else if(sharpi<maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1on;
         led2on;
         led3off;
         motors(-100, -255);
         delay(200); //250
         motors(0,0);
-    }else if(sharpi>maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten && adcd >= limiten){
+        lecturaSensores();
+    }else if(sharpi>maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1off;
         led2on;
         led3on;
         motors(-255, -100);
         delay(200); //250
         motors(0,0);
-    }else if(adci <= limiteb || adcd <= limiteb){
+        lecturaSensores();
+    }else if(adci <= limiteb1 || adcd <= limiteb2){
         st_robot = EVADIR;
     }else{
       st_robot = BUSCANDO;
@@ -246,25 +246,28 @@ void robot_ataqueEvasion(){
 void robot_ataque(){
         
   
-  if(adci <= limiteb || adcd <= limiteb){
+  if(adci <= limiteb1 || adcd <= limiteb2){
     st_robot = EVADIR;
-  }else if(adci >= limiten && adcd >= limiten){
-    if(sharpi>maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten && adcd >= limiten){
+  }else if(adci >= limiten1 && adcd >= limiten2){
+    if(sharpi>maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1on;
         led2on;
         led3on;
         motors(255,255);
-    }else if(sharpi<maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten && adcd >= limiten){
+        lecturaSensores();
+    }else if(sharpi<maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1on;
         led2on;
         led3off;
         motors(255,-255);
-    }else if(sharpi>maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten && adcd >= limiten){
+        lecturaSensores();
+    }else if(sharpi>maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1off;
         led2on;
         led3on;
         motors(-255,255);
-    }else if(adci <= limiteb || adcd <= limiteb){
+        lecturaSensores();
+    }else if(adci <= limiteb1 || adcd <= limiteb2){
         st_robot = EVADIR;
     }else{
       st_robot = BUSCANDO;
@@ -280,12 +283,12 @@ void robot_evadir(){
   led1off;
   led2off;
   led3off;
-  long tiempoGiro = random(200,500);
-  if(adcd <= limiteb && adci >= limiten){
+  long tiempoGiro = random(400,600);
+  if(adcd <= limiteb2 && adci >= limiten1){
     st_evadir = EVADIRDERECHA;
-  }else if(adcd >= limiten && adci <= limiteb){
+  }else if(adcd >= limiten2 && adci <= limiteb1){
     st_evadir = EVADIRIZQUIERDA;
-  }else if(adcd <= limiteb && adci <= limiteb){
+  }else if(adcd <= limiteb2 && adci <= limiteb1){
     st_evadir = EVADIRFULL;
   }else{
     st_evadir = NOEVADIR;
@@ -296,7 +299,7 @@ void robot_evadir(){
     led2on;
     led1off;
     led3off;
-    motors(0, -255);
+    motors(-125, -255);
     delay(tiempoGiro); //250
     motors(0,0);
     break;
@@ -304,7 +307,7 @@ void robot_evadir(){
     led1on;
     led2off;
     led3off;
-    motors(-255, 0);
+    motors(-255, -125);
     delay(tiempoGiro); //250
     motors(0,0);
     break;
@@ -312,7 +315,7 @@ void robot_evadir(){
     led1on;
     led2on;
     led3off;
-    motors(-255, -255);
+    motors(-255, -175);
     delay(tiempoGiro); //400
     motors(0,0);
     break;
@@ -326,7 +329,6 @@ void robot_evadir(){
 
   }
 }
-
 
 
 
@@ -377,18 +379,19 @@ void setup() {
 }
 
 void loop() {
-  //Estado = digitalRead(Inicio);      
-    //if(Estado == HIGH){
-   if(digitalRead(sw1)==HIGH){
-      activate=true;
-   }
-    //else{
-   if(digitalRead(sw2)==HIGH){
+  Estado = digitalRead(Inicio);      
+  if(Estado == 1){
+   //if(digitalRead(sw1)==HIGH){
+    activate=true;
+  }
+  if(Estado == 0){
+   //if(digitalRead(sw2)==HIGH){
       activate=false;
-   }
+      motors(0,0);
+  }
    if(activate){
     lecturaSensores();
-    robot_processEvading();
+    robot_process();
    }
     
     //robot_processAlt();
