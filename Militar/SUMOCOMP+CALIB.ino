@@ -136,7 +136,7 @@ void lecturaSensores(){
  sided = analogRead(0);
 }
 
-void robot_buscandoTornadoAt(){ 
+void robot_buscando(){ 
     lecturaSensores();
     if(adci <= limiteb1 || adcd <= limiteb2){
       st_robot = EVADIR;
@@ -146,7 +146,7 @@ void robot_buscandoTornadoAt(){
       led2off;
       led3on;
       if(sharpi<maxDistanceBig && sharpd<maxDistanceBig){
-          motors(-100,70);
+          motors(95,65);
           if(sidei<maxDistanceMini){
             led1on;
             led2on;
@@ -260,7 +260,7 @@ void robot_process(){
     {
     
     case BUSCANDO:
-        robot_buscandoTornadoAt();
+        robot_buscando();
       break;
     case ATAQUE:
         robot_ataque();
@@ -316,18 +316,18 @@ void loop() {
   {
     robot_calibracion();
     delay(10);   }
-  
-  if(digitalRead(sw1)==HIGH){
-    //led1on;
-    //led2off;
-    //led3off;
-    //evadir = true;
+  if(Estado == 1){
     led1off;
     led2off;
     led3off;
     activate=true;
-
   }
+  if(Estado == 0){
+   //if(digitalRead(sw2)==HIGH){
+      activate=false;
+      motors(0,0);
+  }
+
    if(activate && !evadir && !tornade){
     lecturaSensores();
     robot_process();
