@@ -147,6 +147,7 @@ void robot_buscando(){
       led3on;
       if(sharpi<maxDistanceBig && sharpd<maxDistanceBig){
           motors(95,65);
+          //motors(100,50); -- Circular
           if(sidei<maxDistanceMini){
             led1on;
             led2on;
