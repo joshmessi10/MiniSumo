@@ -1,0 +1,146 @@
+void robot_buscandoEv(){ 
+    lecturaSensores();
+    if(adci <= limiteb1 || adcd <= limiteb2){
+      st_robot = EVADIR;
+    
+    }else{
+      led1off;
+      led2off;
+      led3on;
+      if(sharpi<maxDistanceBig && sharpd<maxDistanceBig){
+          motors(95,70);
+          //motors(100,50); -- Circular Ev
+          if(sidei<maxDistanceMini && adci >= limiten1 && adcd >= limiten2){
+            led1on;
+            led2on;
+            led3off;
+            motors(-255, -100);
+            delay(200); //250
+            motors(0,0);
+          }
+          if(sided<maxDistanceMini && adci >= limiten1 && adcd >= limiten2){
+            led1on;
+            led2off;
+            led3on;
+            motors(-100, -255);
+            delay(200); //250
+            motors(0,0);
+          }
+      }else{
+        st_robot = ATAQUE;
+      }
+    }
+}
+
+
+void robot_ataqueEv(){
+        
+  
+  if(adci <= limiteb1 || adcd <= limiteb2){
+    st_robot = EVADIR;
+  }else if(adci >= limiten1 && adcd >= limiten2){
+    if(sharpi>maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
+        led1on;
+        led2on;
+        led3on;
+        motors(-100, -255);
+        delay(200); //250
+        motors(0,0);
+        lecturaSensores();
+    }else if(sharpi<maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
+        led1on;
+        led2on;
+        led3off;
+        motors(-100, -255);
+        delay(200); //250
+        motors(0,0);
+        lecturaSensores();
+    }else if(sharpi>maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
+        led1off;
+        led2on;
+        led3on;
+        motors(-255, -100);
+        delay(200); //250
+        motors(0,0);
+        lecturaSensores();
+    }else if(adci <= limiteb1 || adcd <= limiteb2){
+        st_robot = EVADIR;
+    }else{
+      st_robot = BUSCANDO;
+    }
+  }
+  
+}
+
+
+void robot_evadir(){
+  led1off;
+  led2off;
+  led3off;
+  long tiempoGiro = random(300,500);
+  if(adcd <= limiteb2 && adci >= limiten1){
+    st_evadir = EVADIRDERECHA;
+  }else if(adcd >= limiten2 && adci <= limiteb1){
+    st_evadir = EVADIRIZQUIERDA;
+  }else if(adcd <= limiteb2 && adci <= limiteb1){
+    st_evadir = EVADIRFULL;
+  }else{
+    st_evadir = NOEVADIR;
+    
+  }
+  switch(st_evadir){
+    case EVADIRDERECHA:
+    led2on;
+    led1off;
+    led3off;
+    motors(-65, -255);
+    delay(tiempoGiro); //250
+    motors(0,0);
+    break;
+    case EVADIRIZQUIERDA:
+    led1on;
+    led2off;
+    led3off;
+    motors(-255, -65);
+    delay(tiempoGiro); //250
+    motors(0,0);
+    break;
+    case EVADIRFULL:
+    led1on;
+    led2on;
+    led3off;
+    motors(-255, -175);
+    delay(tiempoGiro); //400
+    motors(0,0);
+    break;
+    case NOEVADIR:
+    led1off;
+    led2off;
+    led3off;
+    st_robot = BUSCANDO;
+    break;
+
+
+  }
+}
+
+void robot_process(){
+    switch (st_robot)
+    {
+    
+    case BUSCANDO:
+        robot_buscandoEv();
+      break;
+    case ATAQUE:
+        robot_ataqueEv();
+      break;
+          
+    case EVADIR:
+        robot_evadir();
+      break;
+      
+    default: 
+        st_robot = BUSCANDO;
+      break;
+    }
+}
