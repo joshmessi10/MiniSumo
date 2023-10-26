@@ -60,7 +60,7 @@ int read_on;
 int maxDistanceMini = 800; 
 int maxDistanceBig = 200; 
 
-const unsigned long calibracionTemp = 2000;
+const unsigned long calibracionTemp = 2500;
 int adc[2];
 int sensoresPisoMin[] = {1023,1023}; 
 int sensoresPisoMax[] = {0,0}; 
@@ -152,15 +152,14 @@ void robot_buscando(){
       led2off;
       led3off;
       if(sharpi<maxDistanceBig && sharpd<maxDistanceBig){
-          //motors(95,65);
-          //motors(100,50); -- Circular
+          motors(95,65);
           if(sidei<maxDistanceMini){
             led1on;
             led2on;
             led3off;
               while(sharpd<maxDistanceBig && adci >= limiten1 && adcd >= limiten1){
                 lecturaSensores();
-                //motors(-255,100);
+                motors(-255,100);
               }
           }
           if(sided<maxDistanceMini){
@@ -169,7 +168,7 @@ void robot_buscando(){
             led3on;
               while(sharpi<maxDistanceBig && adci >= limiten1 && adcd >= limiten1){
                 lecturaSensores();
-                //motors(100,-255);
+                motors(100,-255);
               }
           }
       }else{
@@ -188,22 +187,22 @@ void robot_buscandoEv(){
       led2off;
       led3off;
       if(sharpi<maxDistanceBig && sharpd<maxDistanceBig){
-          //motors(95,65);
+          motors(95,65);
           if(sidei<maxDistanceMini){
             led1on;
             led2on;
             led3off;
-            //motors(-255, -100);
+            motors(-255, -100);
             delay(200); //250
-            //motors(0,0);
+            motors(0,0);
           }
           if(sided<maxDistanceMini){
             led1on;
             led2off;
             led3on;
-            //motors(-100, -255);
+            motors(-100, -255);
             delay(200); //250
-            //motors(0,0);
+            motors(0,0);
           }
       }else{
         st_robot = ATAQUE;
@@ -221,14 +220,14 @@ void robot_buscandoB(){
       led2off;
       led3off;
       if(sharpi<maxDistanceBig && sharpd<maxDistanceBig){
-          //motors(100,50);
+          motors(125,50);
           if(sidei<maxDistanceMini){
             led1on;
             led2on;
             led3off;
               while(sharpd<maxDistanceBig && adci >= limiten1 && adcd >= limiten1){
                 lecturaSensores();
-                //motors(-255,100);
+                motors(-255,100);
               }
           }
           if(sided<maxDistanceMini){
@@ -237,7 +236,7 @@ void robot_buscandoB(){
             led3on;
               while(sharpi<maxDistanceBig && adci >= limiten1 && adcd >= limiten1){
                 lecturaSensores();
-                //motors(100,-255);
+                motors(100,-255);
               }
           }
       }else{
@@ -256,22 +255,22 @@ void robot_buscandoBEv(){
       led2off;
       led3off;
       if(sharpi<maxDistanceBig && sharpd<maxDistanceBig){
-          //motors(100,50);
+          motors(125,50);
           if(sidei<maxDistanceMini){
             led1on;
             led2on;
             led3off;
-            //motors(-255, -100);
+            motors(-255, -100);
             delay(200); //250
-            //motors(0,0);
+            motors(0,0);
           }
           if(sided<maxDistanceMini){
             led1on;
             led2off;
             led3on;
-            //motors(-100, -255);
+            motors(-100, -255);
             delay(200); //250
-            //motors(0,0);
+            motors(0,0);
           }
       }else{
         st_robot = ATAQUE;
@@ -290,19 +289,19 @@ void robot_ataque(){
         led1on;
         led2on;
         led3on;
-        //motors(255,255);
+        motors(255,255);
         lecturaSensores();
     }else if(sharpi<maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1on;
         led2on;
         led3off;
-        //motors(255,-255);
+        motors(255,-255);
         lecturaSensores();
     }else if(sharpi>maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1off;
         led2on;
         led3on;
-        //motors(-255,255);
+        motors(-255,255);
         lecturaSensores();
     }else if(adci <= limiteb1 || adcd <= limiteb2){
         st_robot = EVADIR;
@@ -323,25 +322,25 @@ void robot_ataqueEv(){
         led1on;
         led2on;
         led3on;
-        //motors(-100, -255);
+        motors(-100, -255);
         delay(200); //250
-        //motors(0,0);
+        motors(0,0);
         lecturaSensores();
     }else if(sharpi<maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1on;
         led2on;
         led3off;
-        //motors(-100, -255);
+        motors(-100, -255);
         delay(200); //250
-        //motors(0,0);
+        motors(0,0);
         lecturaSensores();
     }else if(sharpi>maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1off;
         led2on;
         led3on;
-        //motors(-255, -100);
+        motors(-255, -100);
         delay(200); //250
-        //motors(0,0);
+        motors(0,0);
         lecturaSensores();
     }else if(adci <= limiteb1 || adcd <= limiteb2){
         st_robot = EVADIR;
@@ -362,19 +361,19 @@ void robot_ataqueS(){
         led1on;
         led2on;
         led3on;
-        //motors(255,255);
+        motors(255,255);
         lecturaSensores();
     }else if(sharpi<maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1on;
         led2on;
         led3off;
-        //motors(255,60);
+        motors(255,60);
         lecturaSensores();
     }else if(sharpi>maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1off;
         led2on;
         led3on;
-        //motors(80,255);
+        motors(80,255);
         lecturaSensores();
     }else if(adci <= limiteb1 || adcd <= limiteb2){
         st_robot = EVADIR;
@@ -395,25 +394,25 @@ void robot_ataqueSEv(){
         led1on;
         led2on;
         led3on;
-        //motors(-100, -255);
+        motors(-100, -255);
         delay(200); //250
-        //motors(0,0);
+        motors(0,0);
         lecturaSensores();
     }else if(sharpi<maxDistanceBig && sharpd>maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1on;
         led2on;
         led3off;
-        //motors(-100, -255);
+        motors(-100, -255);
         delay(200); //250
-        //motors(0,0);
+        motors(0,0);
         lecturaSensores();
     }else if(sharpi>maxDistanceBig && sharpd<maxDistanceBig && adci >= limiten1 && adcd >= limiten2){
         led1off;
         led2on;
         led3on;
-        //motors(-255, -100);
+        motors(-255, -100);
         delay(200); //250
-        //motors(0,0);
+        motors(0,0);
         lecturaSensores();
     }else if(adci <= limiteb1 || adcd <= limiteb2){
         st_robot = EVADIR;
@@ -444,25 +443,25 @@ void robot_evadir(){
     led2on;
     led1off;
     led3off;
-    //motors(-65, -255);
+    motors(-65, -255);
     delay(tiempoGiro); //250
-    //motors(0,0);
+    motors(0,0);
     break;
     case EVADIRIZQUIERDA:
     led1on;
     led2off;
     led3off;
-    //motors(-255, -65);
+    motors(-255, -65);
     delay(tiempoGiro); //250
-    //motors(0,0);
+    motors(0,0);
     break;
     case EVADIRFULL:
     led1on;
     led2on;
     led3off;
-    //motors(-255, -175);
+    motors(-255, -175);
     delay(tiempoGiro); //400
-    //motors(0,0);
+    motors(0,0);
     break;
     case NOEVADIR:
     led1off;
@@ -673,7 +672,7 @@ if(digitalRead(sw1)==HIGH){
     led1off;
     led2on;
     led3off;
-    switcher = true;
+    evade = true;
   }
   
    if(activate && !evade && !circular){
