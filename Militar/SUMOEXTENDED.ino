@@ -50,10 +50,10 @@ bool switcher= false;
 bool tornade = false;
 bool activate = false;
 
-int limiteb1;
-int limiten1;
-int limiteb2;
-int limiten2;
+ int limiteb1 = 50;
+ int limiten1 = 50;
+ int limiteb2 = 50;
+ int limiten2 = 50;
 //Colocamos para leer sensor:
 int read_on;
 
@@ -152,7 +152,7 @@ void robot_buscando(){
       led2off;
       led3off;
       if(sharpi<maxDistanceBig && sharpd<maxDistanceBig){
-          motors(95,65);
+          motors(95,95);
           if(sidei<maxDistanceMini){
             led1on;
             led2on;
@@ -255,7 +255,7 @@ void robot_buscandoBEv(){
       led2off;
       led3off;
       if(sharpi<maxDistanceBig && sharpd<maxDistanceBig){
-          motors(125,50);
+          motors(100,50);
           if(sidei<maxDistanceMini){
             led1on;
             led2on;
@@ -645,11 +645,11 @@ void setup() {
 
 void loop() {
 
-  currentMillis = millis();  //get the current "time" (actually the number of milliseconds since the program started)
-  if (currentMillis - startMillis < calibracionTemp)  //test whether the period has elapsed
-  {
-    robot_calibracion();
-    delay(10);   }
+  //currentMillis = millis();  //get the current "time" (actually the number of milliseconds since the program started)
+  //if (currentMillis - startMillis < calibracionTemp)  //test whether the period has elapsed
+  //{
+    //robot_calibracion();
+    //delay(10);   }
   Estado = digitalRead(Inicio);  
   if(Estado == 1){
     led1off;
