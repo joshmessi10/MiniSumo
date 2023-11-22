@@ -51,15 +51,15 @@ bool tornade = false;
 bool activate = false;
 
  int limiteb1 = 50;
- int limiten1 = 50;
+ int limiten1 = 80;
  int limiteb2 = 50;
- int limiten2 = 50;
+ int limiten2 = 80;
 //Colocamos para leer sensor:
 int read_on;
 
-int maxDistanceMini = 750; 
-int maxDistanceBig1 = 200; 
-int maxDistanceBig2 = 250; 
+int maxDistanceMini = 700; 
+int maxDistanceBig1 = 300; 
+int maxDistanceBig2 = 350; 
 
 const unsigned long calibracionTemp = 3000;
 int adc[2];
@@ -137,7 +137,7 @@ void lecturaSensores(){
   //lectura de los sensores de piso y los sharp:
  adcd = analogRead(6); // Lee sensor Derecho
  adci = analogRead(7); // Lee sensor Izquierdo
- sharpi = analogRead(3);
+ sharpi = analogRead(2);
  sharpd = analogRead(1);
  sidei = analogRead(4);
  sided = analogRead(0);
@@ -225,7 +225,7 @@ void robot_buscandoB(){
       led2off;
       led3off;
       if(sharpi<maxDistanceBig1 && sharpd<maxDistanceBig2){
-          motors(150,75);
+          motors(75,150);
           if(sidei<maxDistanceMini){
             led1on;
             led2on;
@@ -473,9 +473,9 @@ void robot_calibracion(){ //Checkear si decimales
     }
   }
   int lim1 = sensoresPisoMin[0]+15;
-  int lim2 = sensoresPisoMax[0]-30;
+  int lim2 = sensoresPisoMax[0]-45;
   int lim3 = sensoresPisoMin[1]+15;
-  int lim4 = sensoresPisoMax[1]-30;
+  int lim4 = sensoresPisoMax[1]-45;
 
   limiteb1 = (lim1+lim2)/2;
   limiten1 = (lim1+lim2)/2;
@@ -491,11 +491,11 @@ void setup() {
 
 void loop() {
 
-  //currentMillis = millis();  //get the current "time" (actually the number of milliseconds since the program started)
-  //if (currentMillis - startMillis < calibracionTemp)  //test whether the period has elapsed
-  //{
-    //robot_calibracion();
-    //delay(10);   }
+  currentMillis = millis();  //get the current "time" (actually the number of milliseconds since the program started)
+  if (currentMillis - startMillis < calibracionTemp)  //test whether the period has elapsed
+  {
+    robot_calibracion();
+    delay(10);   }
   Estado = digitalRead(Inicio);  
   if(Estado == 1){
     led1off;
