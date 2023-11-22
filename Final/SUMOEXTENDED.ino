@@ -67,6 +67,7 @@ int sensoresPisoMin[] = {1023,1023};
 int sensoresPisoMax[] = {0,0}; 
 
 unsigned long startMillis;  //some global variables available anywhere in the program
+unsigned long attackMillis;
 unsigned long currentMillis;
 
 typedef enum{
@@ -143,7 +144,7 @@ void lecturaSensores(){
  sided = analogRead(0);
 }
 
-void robot_buscando(){ 
+void robot_buscandoA(){ 
     lecturaSensores();
     if(adci <= limiteb1 || adcd <= limiteb2){
       st_robot = EVADIR;
@@ -153,7 +154,7 @@ void robot_buscando(){
       led2off;
       led3off;
       if(sharpi<maxDistanceBig1 && sharpd<maxDistanceBig2){
-          motors(200,200);
+          motors(175,175);
           if(sidei<maxDistanceMini){
             led1on;
             led2on;
@@ -171,43 +172,6 @@ void robot_buscando(){
                 lecturaSensores();
                 motors(100,-255);
               }
-          }
-      }else{
-        st_robot = ATAQUE;
-      }
-    }
-}
-
-void robot_buscandoEv(){ 
-    lecturaSensores();
-    if(adci <= limiteb1 || adcd <= limiteb2){
-      st_robot = EVADIR;
-    
-    }else{
-      led1off;
-      led2off;
-      led3off;
-      if(sharpi<maxDistanceBig1 && sharpd<maxDistanceBig2){
-          motors(200,200);
-          if(sidei<maxDistanceMini){
-            led1on;
-            led2on;
-            led3off;
-            motors(-255, -255);
-            delay(200); //250
-            motors(-255, -100);
-            delay(200); //250
-            motors(0,0);
-          }
-          if(sided<maxDistanceMini){
-            led1on;
-            led2off;
-            led3on;
-            motors(-255, -255);
-            delay(200); //250
-            motors(-100, -255);
-            delay(200); //250
-            motors(0,0);
           }
       }else{
         st_robot = ATAQUE;
@@ -225,7 +189,44 @@ void robot_buscandoB(){
       led2off;
       led3off;
       if(sharpi<maxDistanceBig1 && sharpd<maxDistanceBig2){
-          motors(75,150);
+          motors(100,100);
+          if(sidei<maxDistanceMini){
+            led1on;
+            led2on;
+            led3off;
+            motors(-255, -255);
+            delay(100); //250
+            motors(-255, -100);
+            delay(100); //250
+            motors(0,0);
+          }
+          if(sided<maxDistanceMini){
+            led1on;
+            led2off;
+            led3on;
+            motors(-255, -255);
+            delay(100); //250
+            motors(-100, -255);
+            delay(100); //250
+            motors(0,0);
+          }
+      }else{
+        st_robot = ATAQUE;
+      }
+    }
+}
+
+void robot_buscandoC(){ 
+    lecturaSensores();
+    if(adci <= limiteb1 || adcd <= limiteb2){
+      st_robot = EVADIR;
+    
+    }else{
+      led1off;
+      led2off;
+      led3off;
+      if(sharpi<maxDistanceBig1 && sharpd<maxDistanceBig2){
+          motors(80,180);
           if(sidei<maxDistanceMini){
             led1on;
             led2on;
@@ -250,7 +251,7 @@ void robot_buscandoB(){
     }
 }
 
-void robot_buscandoBEv(){ 
+void robot_buscandoD(){ 
     lecturaSensores();
     if(adci <= limiteb1 || adcd <= limiteb2){
       st_robot = EVADIR;
@@ -260,26 +261,24 @@ void robot_buscandoBEv(){
       led2off;
       led3off;
       if(sharpi<maxDistanceBig1 && sharpd<maxDistanceBig2){
-          motors(150,75);
+          motors(50,185);
           if(sidei<maxDistanceMini){
             led1on;
             led2on;
             led3off;
-            motors(-255, -255);
-            delay(200); //250
-            motors(-255, -100);
-            delay(200); //250
-            motors(0,0);
+              while(sharpd<maxDistanceBig2 && adci >= limiten1 && adcd >= limiten1){
+                lecturaSensores();
+                motors(-255,100);
+              }
           }
           if(sided<maxDistanceMini){
             led1on;
             led2off;
             led3on;
-            motors(-255, -255);
-            delay(200); //250
-            motors(-100, -255);
-            delay(200); //250
-            motors(0,0);
+              while(sharpi<maxDistanceBig1 && adci >= limiten1 && adcd >= limiten1){
+                lecturaSensores();
+                motors(100,-255);
+              }
           }
       }else{
         st_robot = ATAQUE;
@@ -299,6 +298,39 @@ void robot_ataque(){
         led2on;
         led3on;
         motors(255,255);
+        lecturaSensores();
+    }else if(sharpi<maxDistanceBig1 && sharpd>maxDistanceBig2 && adci >= limiten1 && adcd >= limiten2){
+        led1on;
+        led2on;
+        led3off;
+        motors(255,-255);
+        lecturaSensores();
+    }else if(sharpi>maxDistanceBig1 && sharpd<maxDistanceBig2 && adci >= limiten1 && adcd >= limiten2){
+        led1off;
+        led2on;
+        led3on;
+        motors(-255,255);
+        lecturaSensores();
+    }else if(adci <= limiteb1 || adcd <= limiteb2){
+        st_robot = EVADIR;
+    }else{
+      st_robot = BUSCANDO;
+    }
+  }
+  
+}
+
+void robot_ataqueEV(){
+        
+  
+  if(adci <= limiteb1 || adcd <= limiteb2){
+    st_robot = EVADIR;
+  }else if(adci >= limiten1 && adcd >= limiten2){
+    if(sharpi>maxDistanceBig1 && sharpd>maxDistanceBig2 && adci >= limiten1 && adcd >= limiten2){
+        led1on;
+        led2on;
+        led3on;
+        motors(255,150);
         lecturaSensores();
     }else if(sharpi<maxDistanceBig1 && sharpd>maxDistanceBig2 && adci >= limiten1 && adcd >= limiten2){
         led1on;
@@ -373,33 +405,12 @@ void robot_evadir(){
   }
 }
 
-void robot_process(){
+void robot_processA(){
     switch (st_robot)
     {
     
     case BUSCANDO:
-        robot_buscando();
-      break;
-    case ATAQUE:
-        robot_ataque();
-      break;
-          
-    case EVADIR:
-        robot_evadir();
-      break;
-      
-    default: 
-        st_robot = BUSCANDO;
-      break;
-    }
-}
-
-void robot_processEv(){
-    switch (st_robot)
-    {
-    
-    case BUSCANDO:
-        robot_buscandoEv();
+        robot_buscandoA();
       break;
     case ATAQUE:
         robot_ataque();
@@ -423,6 +434,27 @@ void robot_processB(){
         robot_buscandoB();
       break;
     case ATAQUE:
+        robot_ataqueEV();
+      break;
+          
+    case EVADIR:
+        robot_evadir();
+      break;
+      
+    default: 
+        st_robot = BUSCANDO;
+      break;
+    }
+}
+
+void robot_processC(){
+    switch (st_robot)
+    {
+    
+    case BUSCANDO:
+        robot_buscandoC();
+      break;
+    case ATAQUE:
         robot_ataque();
       break;
           
@@ -436,12 +468,12 @@ void robot_processB(){
     }
 }
 
-void robot_processBEv(){
+void robot_processD(){
     switch (st_robot)
     {
     
     case BUSCANDO:
-        robot_buscandoBEv();
+        robot_buscandoD();
       break;
     case ATAQUE:
         robot_ataque();
@@ -523,19 +555,19 @@ if(digitalRead(sw1)==HIGH){
   
    if(activate && !evade && !circular){
     lecturaSensores();
-    robot_process();
+    robot_processA();
    }
    if(activate && evade && !circular){
     lecturaSensores();
-    robot_processEv();
+    robot_processB();
    }
    if(activate && !evade && circular){
     lecturaSensores();
-    robot_processB();
+    robot_processC();
    }
    if(activate && evade && circular){
     lecturaSensores();
-    robot_processBEv();
+    robot_processD();
    }
 
 }
