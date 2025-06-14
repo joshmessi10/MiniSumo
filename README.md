@@ -94,9 +94,10 @@ main.c
 ## 📸 Images
 
 Participating in the Robotic People League SOFA 2023
-![RoboticPeopleLeagueSOFA2023](https://github.com/user-attachments/assets/f92229dd-8bef-4827-8bb9-6a8f84f9b029)
+
 <img src="https://github.com/user-attachments/assets/f92229dd-8bef-4827-8bb9-6a8f84f9b029" width="200"/>
 <br/>
+
 https://github.com/user-attachments/assets/cb2c7059-16a6-4471-b555-46d8da943084
 
 
